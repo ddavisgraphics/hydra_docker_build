@@ -17,7 +17,3 @@ RUN \
 
 ENV RAILS_ENV development
 ENV RACK_ENV development
-
-WORKDIR /home/hydra
-ADD ./hydra /home/hydra
-RUN bundle install --jobs=4 --retry=3
