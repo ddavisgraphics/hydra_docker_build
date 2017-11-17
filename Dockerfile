@@ -14,6 +14,3 @@ RUN \
 	&& gem install rails \
 	&& rm -rf /var/cache/apk/* \
 	&& mkdir -p /home/hydra
-
-ENV RAILS_ENV development
-ENV RACK_ENV development
