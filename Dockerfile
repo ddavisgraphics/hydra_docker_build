@@ -1,16 +1,21 @@
-FROM ruby:2.3-alpine
+FROM ruby:2.4
 
-# Set up dependencies
-ENV BUILD_PACKAGES="build-base curl git" \
-		DEV_PACKAGES="bzip2-dev libgcrypt-dev libxml2-dev libxslt-dev openssl-dev mysql-client mysql-dev postgresql-dev sqlite-dev zlib-dev" \
-		RAILS_DEPS="ca-certificates nodejs tzdata" \
-		RAILS_VERSION="5.0.1" 
+# Install capybara-webkit deps
+RUN apt-get update \
+    && apt-get install -y xvfb git qt5-default libqt5webkit5-dev \
+    && gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
+
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install -y nodejs
+
+# yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -\
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y yarn 
 		
 # Install our dependencies and rails
 RUN \
-	apk add --no-cache --update --upgrade --virtual .railsdeps \
-			$BUILD_PACKAGES $DEV_PACKAGES $RAILS_DEPS \
-	&& gem install bundler \
-	&& gem install rails \
-	&& rm -rf /var/cache/apk/* \
-	&& mkdir -p /home/hydra
+	gem install bundler \
+	&& gem install rails
