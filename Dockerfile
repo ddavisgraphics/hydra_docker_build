@@ -1,9 +1,13 @@
 FROM ruby:2.4
 
+ENV BUILD_PACKAGES = "git imagemagick gcc g++ make patch binutils libc6-dev libjemalloc-dev \
+  libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
+  libxslt1-dev libpq-dev libreadline-dev libsqlite3-dev libmysqlclient-dev \
+  tzdata nano"
+
 # Install capybara-webkit deps
 RUN apt-get update \
-    && apt-get install -y xvfb git qt5-default libqt5webkit5-dev \
-    && gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x
+    && apt-get install -y xvfb $BUILD_PACKAGES
 
 # Node.js
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
